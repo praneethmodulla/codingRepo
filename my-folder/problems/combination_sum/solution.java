@@ -1,31 +1,30 @@
 class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        int sum = 0;
         List<Integer> set = new ArrayList<Integer>();
-        res = recurse(candidates, target, set, res, 0);
-        return res;
+        result = recurse(result, set, sum, 0, candidates, target);
+        return result;
     }
 
-    public List<List<Integer>> recurse(int[] nums, int target, List<Integer> set, List<List<Integer>> res, int idx){
-        if(target < 0){
-            return res;
+    public List<List<Integer>> recurse(List<List<Integer>> result, List<Integer> set, int sum, int idx, int[] nums, int target){
+        if(sum > target){
+            return result;
+        }
+        if(sum == target){
+            List<Integer> copySet = new ArrayList<Integer>(set);
+            result.add(copySet);
+            return result;
         }
         if(idx == nums.length){
-            if(target == 0){
-                List<Integer> copySet = new ArrayList<Integer>();
-                for(int i = 0; i < set.size(); i++){
-                    copySet.add(set.get(i));
-                }
-                res.add(copySet);
-                return res;
-            } else {
-                return res;
-            }
+            return result;
         }
+        sum += nums[idx];
         set.add(nums[idx]);
-        res = recurse(nums, target - nums[idx], set, res, idx);
+        result = recurse(result, set, sum, idx, nums, target);
+        sum -= nums[idx];
         set.remove(set.size() - 1);
-        res = recurse(nums, target, set, res, idx + 1);
-        return res;
+        result = recurse(result, set, sum, idx + 1, nums, target);
+        return result;
     }
 }
