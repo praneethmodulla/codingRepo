@@ -1,28 +1,23 @@
 class Solution {
     public int longestOnes(int[] nums, int k) {
-        int leftPointer = 0;
-        int rightPointer = 0;
-        int len = 0;
-        int counter = 0;
-        for(rightPointer = 0; rightPointer < nums.length; rightPointer++){
-            if(nums[rightPointer] != 1 && counter == k){
-                if(len < rightPointer - leftPointer){
-                    len = rightPointer - leftPointer;
+        int leftPtr = 0;
+        int rightPtr = 0;
+        int cnt = 0;
+        int maxLen = 0;
+        for(rightPtr = 0; rightPtr < nums.length; rightPtr++){
+            while(cnt >= k && nums[rightPtr] == 0){
+                if(nums[leftPtr] == 0){
+                    cnt--;
                 }
-                while(counter >= k){
-                    if(nums[leftPointer] == 0){
-                        counter--;
-                    }
-                    leftPointer++;
-                }
+                leftPtr++;
             }
-            if(nums[rightPointer] != 1 && counter < k){
-                counter++;
+            if(nums[rightPtr] == 0 && cnt < k){
+                cnt++;
+            }
+            if(maxLen < rightPtr - leftPtr + 1){
+                maxLen = rightPtr - leftPtr + 1;
             }
         }
-        if(len < rightPointer - leftPointer){
-            len = rightPointer - leftPointer;
-        }
-        return len;
+        return maxLen;
     }
 }
