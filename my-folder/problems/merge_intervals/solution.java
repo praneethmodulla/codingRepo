@@ -1,33 +1,35 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
-        Arrays.sort(intervals, new Comparator<int[]>() {
-            public int compare(int[] a, int[] b){
-                return a[0] - b[0];
-            }
-        });
-        List<List<Integer>> res = new ArrayList<List<Integer>>();
-
+        PriorityQueue<int[]> heap = new PriorityQueue<int[]>((a,b) -> Integer.compare(a[0], b[0]));
         for(int i = 0; i < intervals.length; i++){
-            int start = intervals[i][0];
-            int end = intervals[i][1];
-
-            if(!res.isEmpty() && start <= res.get(res.size() - 1).get(1)){
-                end = Math.max(end, res.get(res.size() - 1).get(1));
-                res.get(res.size() - 1).remove(1);
-                res.get(res.size() - 1).add(end);
+            heap.add(new int[]{intervals[i][0], intervals[i][1]});
+        }
+        int[] prev = heap.poll();
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        while(!heap.isEmpty()){
+            int[] var = heap.poll();
+            if(var[0] <= prev[1]){
+                if(var[1] > prev[1]){
+                    prev[1] = var[1];
+                }
             } else {
-                List<Integer> indInterval = new ArrayList<>();
-                indInterval.add(start);
-                indInterval.add(end);
-                res.add(indInterval); 
+                ArrayList<Integer> res = new ArrayList<Integer>();
+                res.add(prev[0]);
+                res.add(prev[1]);
+                result.add(res);
+                prev[0] = var[0];
+                prev[1] = var[1];
             }
         }
-
-        int[][] result = new int[res.size()][2];
-        for(int i = 0; i < res.size(); i++){
-            result[i][0] = res.get(i).get(0);
-            result[i][1] = res.get(i).get(1);
+        ArrayList<Integer> res = new ArrayList<Integer>();
+        res.add(prev[0]);
+        res.add(prev[1]);
+        result.add(res);
+        int[][] answer = new int[result.size()][2];
+        for(int i = 0; i < result.size(); i++){
+            answer[i][0] = result.get(i).get(0);
+            answer[i][1] = result.get(i).get(1);
         }
-        return result;
+        return answer;
     }
 }
