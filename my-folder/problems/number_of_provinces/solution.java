@@ -1,34 +1,35 @@
 class Solution {
     public int findCircleNum(int[][] isConnected) {
-        int numProvinces = 0;
-        int n = isConnected.length;
-        ArrayList<ArrayList<Integer>> adj = new ArrayList<ArrayList<Integer>>();
-        for(int i = 0; i < n; i++){
-            ArrayList<Integer> nodes = new ArrayList<Integer>();
-            for(int j = 0; j < n; j++){
-                if(isConnected[i][j] == 1 && i != j){
-                    nodes.add(j);
+        int[] vis = new int[isConnected.length];
+        int num = 0;
+        List<List<Integer>> adj = new ArrayList<List<Integer>>();
+        for(int i = 0; i < isConnected.length; i++){
+            adj.add(new ArrayList<Integer>());
+        }
+        for(int i = 0; i < isConnected.length; i++){
+            for(int j = 0; j < isConnected[i].length; j++){
+                if(i != j && isConnected[i][j] == 1){
+                    adj.get(i).add(j);
                 }
             }
-            adj.add(nodes);
         }
-        
-        int[] vis = new int[n];
-        for(int i = 0; i < n; i++){
-            if(vis[i] == 0){
-                numProvinces++;
-                recurse(vis, adj, i);
+        for(int i = 0; i < adj.size(); i++){
+            if(vis[i] != 1){
+                num++;
+                recurse(adj, vis, i);
             }
         }
-        return numProvinces;
+        return num;
     }
-
-    public void recurse(int[] vis, ArrayList<ArrayList<Integer>> adj, int node){
+    public void recurse(List<List<Integer>> adj, int[] vis, int node){
+        if(vis[node] == 1){
+            return;
+        }
         vis[node] = 1;
-        ArrayList<Integer> nodes = adj.get(node);
+        List<Integer> nodes = adj.get(node);
         for(int i = 0; i < nodes.size(); i++){
             if(vis[nodes.get(i)] != 1){
-                recurse(vis, adj, nodes.get(i));
+                recurse(adj, vis, nodes.get(i));
             }
         }
         return;
