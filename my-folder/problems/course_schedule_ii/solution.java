@@ -1,38 +1,30 @@
 class Solution {
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        List<List<Integer>> adjList = new ArrayList<List<Integer>>();
+        List<List<Integer>> adj = new ArrayList<List<Integer>>();
         for(int i = 0; i < numCourses; i++){
-            adjList.add(new ArrayList<Integer>());
-        }
-        for(int i = 0; i < prerequisites.length; i++){
-            adjList.get(prerequisites[i][1]).add(prerequisites[i][0]);
+            adj.add(new ArrayList<Integer>());
         }
         int[] indegree = new int[numCourses];
-        for(int i = 0; i < adjList.size(); i++){
-            List<Integer> nodes = adjList.get(i);
-            for(int j = 0; j < nodes.size(); j++){
-                indegree[nodes.get(j)]++;
-            }
+        for(int i = 0; i < prerequisites.length; i++){
+            indegree[prerequisites[i][0]]++;
+            adj.get(prerequisites[i][1]).add(prerequisites[i][0]);
         }
         Queue<Integer> queue = new LinkedList<Integer>();
+        int[] res = new int[numCourses];
         for(int i = 0; i < indegree.length; i++){
             if(indegree[i] == 0){
                 queue.add(i);
             }
         }
-        int[] ans = new int[numCourses];
-        if(queue.isEmpty()){
-            return new int[0];
-        }
-        List<Integer> answer = new ArrayList<Integer>();
+        int idx = 0;
         while(!queue.isEmpty()){
-            int node = queue.poll();
-            List<Integer> nodes = adjList.get(node);
-            answer.add(node);
-            for(int i = 0; i < nodes.size(); i++){
-                indegree[nodes.get(i)]--;
-                if(indegree[nodes.get(i)] == 0){
-                    queue.add(nodes.get(i));
+            int course = queue.poll();
+            res[idx++] = course;
+            List<Integer> courses = adj.get(course);
+            for(int i = 0; i < courses.size(); i++){
+                indegree[courses.get(i)]--;
+                if(indegree[courses.get(i)] == 0){
+                    queue.add(courses.get(i));
                 }
             }
         }
@@ -41,9 +33,6 @@ class Solution {
                 return new int[0];
             }
         }
-        for(int i = 0; i < answer.size(); i++){
-            ans[i] = answer.get(i);
-        }
-        return ans;
+        return res;
     }
 }
