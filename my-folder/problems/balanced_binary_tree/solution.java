@@ -15,24 +15,27 @@
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        boolean[] isBalance = new boolean[1];
-        isBalance[0] = true;
-        int val = recurse(root, isBalance);
-        return isBalance[0];
-        
+        int check = recurse(root);
+        if(check == -1){
+            return false;
+        }
+        return true;
     }
-    public int recurse(TreeNode root, boolean[] isBalance){
+    public int recurse(TreeNode root){
         if(root == null){
             return 0;
         }
-        if(!isBalance[0]){
-            return 0;
+        int left = recurse(root.left);
+        if(left == -1){
+            return -1;
         }
-        int leftHeight = recurse(root.left, isBalance);
-        int rightHeight = recurse(root.right, isBalance);
-        if(Math.abs(leftHeight - rightHeight) > 1){
-            isBalance[0] = false;
+        int right = recurse(root.right);
+        if(right == -1){
+            return -1;
         }
-        return Math.max(leftHeight, rightHeight) + 1; 
+        if(Math.abs(left - right) > 1){
+            return -1;
+        }
+        return Math.max(left, right) + 1;
     }
 }
