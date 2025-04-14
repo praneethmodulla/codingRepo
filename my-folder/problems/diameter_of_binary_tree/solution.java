@@ -19,14 +19,14 @@ class Solution {
         recurse(root, diameter);
         return diameter[0];
     }
+
     public int recurse(TreeNode root, int[] diameter){
         if(root == null){
             return 0;
         }
-
-        int leftHeight = recurse(root.left, diameter);
-        int rightHeight = recurse(root.right, diameter);
-        diameter[0] = Math.max(diameter[0], leftHeight + rightHeight);
-        return Math.max(leftHeight, rightHeight) + 1;
+        int left = recurse(root.left, diameter);
+        int right = recurse(root.right, diameter);
+        diameter[0] = Math.max(diameter[0], left + right);
+        return Math.max(left, right) + 1;
     }
 }
