@@ -1,27 +1,18 @@
 class Solution {
     public int uniquePaths(int m, int n) {
         int[][] dp = new int[m][n];
-        for(int[] row : dp){
-            Arrays.fill(row, -1);
+        dp[0][0] = 1;
+        for(int i = 1; i < dp[0].length; i++){
+            dp[0][i] = 1;
         }
-        return recurse(m - 1, n - 1, 0, 0, dp);
-    }
-
-    public int recurse(int row, int col, int finalRow, int finalCol, int[][] dp){
-        if(row == finalRow && col == finalCol){
-            return 1;
+        for(int i = 1; i < dp.length; i++){
+            dp[i][0] = 1;
         }
-        if(row < finalRow){
-            return 0;
+        for(int i = 1; i < dp.length; i++){
+            for(int j = 1; j < dp[0].length; j++){
+                dp[i][j] = dp[i][j - 1] + dp[i - 1][j];
+            }
         }
-        if(col < finalCol){
-            return 0;
-        }
-        if(dp[row][col] != -1){
-            return dp[row][col];
-        }
-        int up = recurse(row - 1, col, finalRow, finalCol, dp);
-        int left = recurse(row, col - 1, finalRow, finalCol, dp);
-        return dp[row][col] = up + left;
+        return dp[m - 1][n - 1];
     }
 }
