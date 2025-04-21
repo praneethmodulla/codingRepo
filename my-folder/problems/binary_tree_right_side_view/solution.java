@@ -19,18 +19,23 @@ class Solution {
         if(root == null){
             return result;
         }
-        recurse(root, result, 0);
+        TreeMap<Integer, Integer> tMap = new TreeMap<Integer, Integer>();
+        recurse(root, tMap, 0);
+        for(int i : tMap.keySet()){
+            result.add(tMap.get(i));
+        }
         return result;
     }
-    public void recurse(TreeNode node, List<Integer> result, int level){
-        if(node == null){
+
+    public void recurse(TreeNode root, TreeMap<Integer, Integer> tMap, int level){
+        if(root == null){
             return;
         }
-        if(result.size() == level){
-            result.add(node.val);
+        if(!tMap.containsKey(level)){
+            tMap.put(level, root.val);
         }
-        recurse(node.right, result, level + 1);
-        recurse(node.left, result, level + 1);
+        recurse(root.right, tMap, level + 1);
+        recurse(root.left, tMap, level + 1);
         return;
     }
 }
