@@ -1,30 +1,25 @@
 class Solution {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        int sum = 0;
-        List<Integer> set = new ArrayList<Integer>();
-        result = recurse(result, set, sum, 0, candidates, target);
+        List<Integer> res = new ArrayList<Integer>();
+        recurse(candidates, target, res, result, 0);
         return result;
     }
 
-    public List<List<Integer>> recurse(List<List<Integer>> result, List<Integer> set, int sum, int idx, int[] nums, int target){
-        if(sum > target){
-            return result;
-        }
-        if(sum == target){
-            List<Integer> copySet = new ArrayList<Integer>(set);
-            result.add(copySet);
-            return result;
+    public void recurse(int[] nums, int target, List<Integer> res, List<List<Integer>> result, int idx){
+        if(target < 0){
+            return;
         }
         if(idx == nums.length){
-            return result;
+            if(target == 0){
+                result.add(new ArrayList<Integer>(res));
+            }
+            return;
         }
-        sum += nums[idx];
-        set.add(nums[idx]);
-        result = recurse(result, set, sum, idx, nums, target);
-        sum -= nums[idx];
-        set.remove(set.size() - 1);
-        result = recurse(result, set, sum, idx + 1, nums, target);
-        return result;
+        res.add(nums[idx]);
+        recurse(nums, target - nums[idx], res, result, idx);
+        res.remove(res.size() - 1);
+        recurse(nums, target, res, result, idx + 1);
+        return;
     }
 }
