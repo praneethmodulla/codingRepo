@@ -1,69 +1,92 @@
 class Solution {
     public List<List<String>> solveNQueens(int n) {
+        List<List<String>> result = new ArrayList<List<String>>();
+        if(n == 1){
+            List<String> res = new ArrayList<String>();
+            res.add("Q");
+            result.add(res);
+            return result;
+        }
         char[][] board = new char[n][n];
         for(int i = 0; i < n; i++){
             for(int j = 0; j < n; j++){
                 board[i][j] = '.';
             }
         }
-        List<List<String>> res = new ArrayList<List<String>>();
-        recurse(n - 1, board, res);
-        return res;
+        constructBoard(board, result);
+        return result;
     }
 
-    public void recurse(int row, char[][] board, List<List<String>> res){
-        if(row < 0){
-            res = construct(board, res);
-            return;
-        }
-
+    public void build(char[][] board, List<List<String>> res){
+        List<String> row = new ArrayList<String>();
         for(int i = 0; i < board.length; i++){
-            if(validate(row, i, board)){
-                board[row][i] = 'Q';
-                recurse(row - 1, board, res);
-                board[row][i] = '.';
+            StringBuilder sb = new StringBuilder();
+            for(int j = 0; j < board.length; j++){
+                sb.append(board[i][j]);
             }
+            row.add(sb.toString());
+        }
+        res.add(row);
+    }
+
+    public void constructBoard(char[][] board, List<List<String>> res){
+        for(int i = 0; i < board.length; i++){
+            board[board.length - 1][i] = 'Q';
+            recurse(board, board.length - 2, res);
+            board[board.length - 1][i] = '.';
         }
         return;
     }
-    public List<List<String>> construct(char[][] board, List<List<String>> res){
-        List<String> result = new ArrayList<String>();
-        for(int i = 0; i < board.length; i++){
-            result.add(new String(board[i]));
+
+    public boolean recurse(char[][] board, int row, List<List<String>> res){
+        if(row < 0){
+            return true;
         }
-        res.add(result);
-        return res;
+        for(int i = 0; i < board[row].length; i++){
+            if(check(board, row, i)){
+                board[row][i] = 'Q';
+                if(recurse(board, row - 1, res)){
+                    build(board, res);
+                }
+                board[row][i] = '.';
+            }
+        }
+        return false;
     }
-    public boolean validate(int row, int col, char[][] board){
-        int tempCol = col;
-        int tempRow = row;
-        //Check for No Queen in the column
-        while(tempRow < board.length){
-            if(board[tempRow][tempCol] == 'Q'){
+
+    public boolean check(char[][] board, int row, int col){
+        // check Row
+        for(int i = 0; i < board.length; i++){
+            if(board[row][i] == 'Q'){
                 return false;
             }
-            tempRow++;
         }
-        //Check for No Queen in the Diagonal - 1
-        tempRow = row;
-        tempCol = col;
-        while(tempRow < board.length && tempCol < board.length){
-            if(board[tempRow][tempCol] == 'Q'){
+        // check Column
+        for(int i = row; i < board.length; i++){
+            if(board[i][col] == 'Q'){
                 return false;
             }
-            tempRow++;
-            tempCol++;
+        } 
+
+        // check diagonal 1
+        int i = row + 1;
+        int j = col + 1;
+        while(i < board.length && j < board.length){
+            if(board[i][j] == 'Q'){
+                return false;
+            }
+            i++;
+            j++;
         }
-        //Check for No Queen in the Diagonal - 2
-        tempRow = row;
-        tempCol = col;
-        while(tempRow < board.length && tempCol >= 0){
-            if(board[tempRow][tempCol] == 'Q'){
+        i = row + 1;
+        j = col - 1;
+        while(i < board.length && j >= 0){
+            if(board[i][j] == 'Q'){
                 return false;
             }
-            tempRow++;
-            tempCol--;
+            i++;
+            j--;
         }
         return true;
-    }
+    } 
 }
