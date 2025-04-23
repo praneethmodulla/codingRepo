@@ -1,21 +1,21 @@
 class Solution {
     public List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        List<Integer> set = new ArrayList<Integer>();
-        result = recurse(nums, set, result, 0);
+        List<Integer> res = new ArrayList<Integer>();
+        recurse(nums, 0, res, result);
         return result;
     }
 
-    public List<List<Integer>> recurse(int[] nums, List<Integer> set, List<List<Integer>> result, int idx){
+    public void recurse(int[] nums, int idx, List<Integer> res, List<List<Integer>> result){
         if(idx == nums.length){
-            List<Integer> copySet = new ArrayList<>(set);
-            result.add(copySet);
-            return result;
+            result.add(new ArrayList<Integer>(res));
+            return;
         }
-        set.add(nums[idx]);
-        result = recurse(nums, set, result, idx + 1);
-        set.remove(set.size() - 1);
-        result = recurse(nums, set, result, idx + 1);
-        return result;
+
+        res.add(nums[idx]);
+        recurse(nums, idx + 1, res, result);
+        res.remove(res.size() - 1);
+        recurse(nums, idx + 1, res, result);
+        return;
     }
 }
