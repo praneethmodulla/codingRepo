@@ -1,28 +1,25 @@
 class Solution {
     public List<List<Integer>> combinationSum3(int k, int n) {
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        List<Integer> set = new ArrayList<Integer>();
-        result = recurse(result, set, k, n, 1, 0);
+        List<Integer> res = new ArrayList<Integer>();
+        recurse(k, n, result, res, 1);
         return result;
     }
 
-    public List<List<Integer>> recurse(List<List<Integer>> result, List<Integer> set, int length, int targetSum, int val, int sum){
-        if(set.size() == length){
-            if(sum == targetSum){
-                result.add(new ArrayList<Integer>(set));
+    public void recurse(int k, int n, List<List<Integer>> result, List<Integer> res, int num){
+        if(k == 0){
+            if(n == 0){
+                result.add(new ArrayList<Integer>(res));
             }
-            return result;
+            return;
         }
-        if(val > 9){
-            return result;
+        if(num > 9){
+            return;
         }
-        set.add(val);
-        sum += val;
-        result = recurse(result, set, length, targetSum, val + 1, sum);
-        set.remove(set.size() - 1);
-        sum -= val;
-        result = recurse(result, set, length, targetSum, val + 1, sum);
-
-        return result;
+        res.add(num);
+        recurse(k - 1, n - num, result, res, num + 1);
+        res.remove(res.size() - 1);
+        recurse(k, n, result, res, num + 1);
+        return;
     }
 }
