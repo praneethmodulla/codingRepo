@@ -2,10 +2,11 @@ class Solution {
     public boolean search(int[] nums, int target) {
         int low = 0;
         int high = nums.length - 1;
-        int mid = 0;
         while(low <= high){
-            mid = (low + high)/2;
-            if(nums[mid] == target) return true;
+            int mid = (low + high)/2;
+            if(nums[mid] == target){
+                return true;
+            }
             if(nums[low] == nums[mid] && nums[mid] == nums[high]){
                 low = low + 1;
                 high = high - 1;
