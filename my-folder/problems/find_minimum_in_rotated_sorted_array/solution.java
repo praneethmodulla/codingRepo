@@ -8,13 +8,14 @@ class Solution {
             if(nums[mid] < min){
                 min = nums[mid];
             }
-            if(nums[low] <= nums[mid] && nums[low] <= nums[high]){
+            if(nums[low] < nums[mid] && nums[mid] < nums[high]){
                 high = mid - 1;
-            } else if(nums[mid] >= nums[high] && nums[high] <= nums[low]){
+            } else if(nums[mid] > nums[high] && nums[mid] > nums[low]){
                 low = mid + 1;
-            } else if(nums[mid] <= nums[low] && nums[mid] <= nums[high]){
-                low = low + 1;
-                high = high - 1;
+            } else if(nums[low] > nums[mid] && nums[high] > nums[mid]){
+                high = mid - 1;
+            } else {
+                low = mid + 1;
             }
         }
         return min;
