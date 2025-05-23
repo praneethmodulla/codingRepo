@@ -1,39 +1,35 @@
 class Solution {
     public int minEatingSpeed(int[] piles, int h) {
-        int max = Integer.MIN_VALUE;
+        int maxVal = 0;
         for(int i = 0; i < piles.length; i++){
-            if(max < piles[i]){
-                max = piles[i];
-            }
-        }
-        if(h == piles.length){
-            return max;
+            maxVal = Math.max(maxVal, piles[i]);
         }
         int low = 1;
-        int high = max;
-        int mid = 0;
-        int ans = 1;
+        int high = maxVal;
         while(low <= high){
-            mid = (low + high)/2;
-            long timeTaken = reqTime(mid, piles);
-            if(timeTaken <= h){
-                ans = mid;
-                high = mid - 1;
-            } else if(timeTaken > h){
+            int mid = (low + high)/2;
+            long num = check(piles, mid);
+            if(num > h){
                 low = mid + 1;
-            } 
-        }
-        return ans;
-    }
-    public long reqTime(int mid, int[] piles){
-        long totalTime = 0;
-        for(int i = 0; i < piles.length; i++){
-            if(piles[i]%mid == 0){
-                totalTime += piles[i]/mid;
             } else {
-                totalTime += (piles[i]/mid) + 1;
+                high = mid - 1;
             }
         }
-        return totalTime;
+        return low;
+    }
+    public long check(int[] piles, int eat){
+        long numHours = 0;
+        for(int i = 0; i < piles.length; i++){
+            if(piles[i] <= eat){
+                numHours += 1;
+            } else {
+                if(piles[i]%eat == 0){
+                    numHours += piles[i]/eat;
+                } else {
+                    numHours += (piles[i]/eat) + 1;
+                }
+            }
+        }
+        return numHours;
     }
 }
