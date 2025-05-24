@@ -1,44 +1,45 @@
 class Solution {
     public int splitArray(int[] nums, int k) {
-        int maxElement = Integer.MIN_VALUE;
-        int sum = 0;
-        if(nums.length < k){
-            return -1;
-        }
+        int min = Integer.MAX_VALUE;
+        int max = 0;
         for(int i = 0; i < nums.length; i++){
-            if(maxElement < nums[i]){
-                maxElement = nums[i];
-            }
-            sum += nums[i];
+            min = Math.min(nums[i], min);
+            max += nums[i];
         }
-        int low = maxElement;
-        int high = sum;
-        int mid = 0;
-        int ans = 0;
+        int low = min;
+        int high = max;
         while(low <= high){
-            mid = (low + high)/2;
-            int numPartitions = reqPartitions(nums, mid);
-            if(numPartitions > k){
+            int mid = (low + high)/2;
+            int splits = check(nums, mid);
+            if(splits > k){
                 low = mid + 1;
             } else {
-                ans = mid;
                 high = mid - 1;
             }
         }
-        return ans;
+        return low;
     }
 
-    public int reqPartitions(int[] nums, int mid){
-        int numPartitions = 0;
+    public int check(int[] nums, int mid){
         int sum = 0;
+        int split = 0;
         for(int i = 0; i < nums.length; i++){
-            if(sum + nums[i] <= mid){
+            if(nums[i] > mid){
+                return Integer.MAX_VALUE;
+            }
+            if(sum + nums[i] < mid){
                 sum += nums[i];
+            } else if(sum + nums[i] == mid){
+                sum = 0;
+                split++;
             } else {
                 sum = nums[i];
-                numPartitions += 1;
+                split++;
             }
         }
-        return numPartitions + 1;
+        if(sum > 0){
+            split++;
+        }
+        return split;
     }
 }
