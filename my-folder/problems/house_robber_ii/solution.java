@@ -5,32 +5,33 @@ class Solution {
         }
         int[] nums1 = new int[nums.length - 1];
         int[] nums2 = new int[nums.length - 1];
-
         for(int i = 0; i < nums.length; i++){
-            if(i != 0){
-                nums1[i - 1] = nums[i];
-            }
             if(i != nums.length - 1){
-                nums2[i] = nums[i];
+                nums1[i] = nums[i];
+            }
+            if(i != 0){
+                nums2[i - 1] = nums[i];
             }
         }
-        return Math.max(houseRob(nums1), houseRob(nums2)); 
+        int[] dp1 = new int[nums.length];
+        Arrays.fill(dp1, -1);
+        int[] dp2 = new int[nums.length];
+        Arrays.fill(dp2, -1);
+        return Math.max(recurse(nums1, nums1.length - 1, dp1), recurse(nums2, nums2.length - 1, dp2));
     }
 
-    public int houseRob(int[] nums){
-        int[] dp = new int[nums.length];
-        if(nums.length == 1){
+    public int recurse(int[] nums, int idx, int[] dp){
+        if(idx < 0){
+            return 0;
+        }
+        if(idx == 0){
             return nums[0];
         }
-        dp[0] = nums[0];
-        dp[1] = nums[1];
-        int maxVal = Math.max(dp[0], dp[1]);
-        for(int i = 2; i < nums.length; i++){
-            for(int k = i - 2; k >= 0; k--){
-                dp[i] = Math.max(dp[i], nums[i] + dp[k]);
-            }
-            maxVal = Math.max(maxVal, dp[i]);
+        if(dp[idx] != -1){
+            return dp[idx];
         }
-        return maxVal;
+        int take = nums[idx] + recurse(nums, idx - 2, dp);
+        int notTake = recurse(nums, idx - 1, dp);
+        return dp[idx] = Math.max(take, notTake);
     }
 }
