@@ -1,22 +1,21 @@
 class Solution {
     public int rob(int[] nums) {
-        if(nums.length == 1){
+        int[] dp = new int[nums.length + 1];
+        Arrays.fill(dp, -1);
+        return recurse(nums, nums.length - 1, nums.length, dp);
+    }
+    public int recurse(int[] nums, int idx, int prev, int[] dp){
+        if(idx == 0){
             return nums[0];
         }
-        int[] dp = new int[nums.length];
-        Arrays.fill(dp, Integer.MIN_VALUE);
-        int max = Integer.MIN_VALUE;
-        dp[0] = nums[0];
-        dp[1] = nums[1];
-        max = Math.max(dp[0], dp[1]);
-        for(int i = 2; i < nums.length; i++){
-            int cnt = 2;
-            while(i - cnt >= 0){
-                dp[i] = Math.max(dp[i], dp[i - cnt] + nums[i]);
-                cnt++;
-            }
-            max = Math.max(dp[i], max);
+        if(idx < 0){
+            return 0;
         }
-        return max;
+        if(dp[idx] != -1){
+            return dp[idx];
+        }
+        int take = nums[idx] + recurse(nums, idx - 2, idx, dp);
+        int notTake = recurse(nums, idx - 1, prev, dp);
+        return dp[idx] = Math.max(take, notTake);
     }
 }
