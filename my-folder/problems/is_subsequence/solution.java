@@ -1,21 +1,21 @@
 class Solution {
     public boolean isSubsequence(String s, String t) {
-        if(t.length() < s.length()){
+        if(s.length() > t.length()){
             return false;
         }
-        return recurse(s.length() - 1, t.length() - 1, s, t);
-    }
-
-    public boolean recurse(int idx1, int idx2, String s, String t){
-        if(idx1 < 0){
-            return true;
+        int i = 0;
+        int j = 0;
+        while(i < s.length() && j < t.length()){
+            if(s.charAt(i) == t.charAt(j)){
+                i++;
+                j++;
+            } else {
+                j++;
+            }
         }
-        if(idx2 < 0){
+        if(i < s.length()){
             return false;
         }
-        if(s.charAt(idx1) == t.charAt(idx2)){
-            return recurse(idx1 - 1, idx2 - 1, s, t);
-        }
-        return recurse(idx1, idx2 - 1, s, t);
+        return true;
     }
 }
