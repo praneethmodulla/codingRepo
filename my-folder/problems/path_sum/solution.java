@@ -20,21 +20,23 @@ class Solution {
         }
         return recurse(root, targetSum, 0);
     }
-    public boolean recurse(TreeNode node, int target, int sum){
+
+    public boolean recurse(TreeNode node, int Tsum, int sum){
         if(node == null){
             return false;
         }
         if(node.left == null && node.right == null){
-            sum += node.val;
-            if(sum == target){
+            if(sum + node.val == Tsum){
                 return true;
             }
             return false;
         }
         sum += node.val;
-        boolean checkLeft = recurse(node.left, target, sum);
-        boolean checkRight = recurse(node.right, target, sum);
-        sum -= node.val;
-        return checkLeft || checkRight;
+        boolean left = recurse(node.left, Tsum, sum);
+        boolean right = recurse(node.right, Tsum, sum);
+        if(left || right){
+            return true;
+        }
+        return false;
     }
 }
