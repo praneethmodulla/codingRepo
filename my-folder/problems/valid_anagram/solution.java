@@ -3,15 +3,18 @@ class Solution {
         if(s.length() != t.length()){
             return false;
         }
-        char[] sArray = s.toCharArray();
-        char[] tArray = t.toCharArray();
-        Arrays.sort(sArray);
-        Arrays.sort(tArray);
-        for(int i = 0; i < s.length(); i++){
-            if(sArray[i] != tArray[i]){
+        char[] charS = s.toCharArray();
+        char[] charT = t.toCharArray();
+        Arrays.sort(charS);
+        Arrays.sort(charT);
+        for(int i = 0; i < charS.length; i++){
+            if(charS[i] == charT[i]){
+                continue;
+            } else {
                 return false;
             }
         }
         return true;
     }
+    
 }
