@@ -3,46 +3,24 @@ class Solution {
         if(numRows == 1){
             return s;
         }
-        char[][] board = new char[numRows][s.length()];
-        for(char[] row : board){
-            Arrays.fill(row, '1');
-        }
         StringBuilder sb = new StringBuilder();
-        int j = 0;
-        int k = 0;
-        boolean down = true;
-        for(int i = 0; i < s.length(); i++){
-            if(down && j < numRows){
-                board[j][k] = s.charAt(i);
-                j++;
-            } else if((!down) && j > 0){
-                board[j][k] = s.charAt(i);
-                j--;
-                k++;
-            } else if(j == numRows){
-                k++;
-                j = numRows - 2;
-                if(j == 0){
-                    board[j][k] = s.charAt(i);
-                    j++;
+        int row = 1;
+        while(row <= numRows){
+            int i = row - 1;
+            boolean down = true;
+            while(i < s.length()){
+                sb.append(s.charAt(i));
+                if(down && row != numRows){
+                    i += 2 * (numRows - row);
+                    if(row != 1){
+                        down = false;
+                    }
                 } else {
-                    board[j][k] = s.charAt(i);
-                    k++;
-                    j--;
-                    down = false;
-                }
-            } else if(j == 0){
-                down = true;
-                board[j][k] = s.charAt(i);
-                j++;
-            }
-        }
-        for(int i = 0; i < numRows; i++){
-            for(int l = 0; l < s.length(); l++){
-                if(board[i][l] != '1'){
-                    sb.append(board[i][l]);
+                    i += 2 * (row - 1);
+                    down = true;
                 }
             }
+            row++;
         }
         return sb.toString();
     }
