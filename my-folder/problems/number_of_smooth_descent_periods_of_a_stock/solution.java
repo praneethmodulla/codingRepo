@@ -1,17 +1,29 @@
 class Solution {
     public long getDescentPeriods(int[] prices) {
         long ans = 0;
-        int left = 0;
-        for(int i = 1; i < prices.length; i++){
-            if(prices[i - 1] - 1 == prices[i]){
+        int start = 0;
+        int end = 0;
+        while(end < prices.length){
+            if(end == 0){
+                end++;
                 continue;
             }
-            long len = i - left;
-            ans += (len) * (len + 1)/2;
-            left = i;
+            while(end < prices.length && prices[end] + 1 == prices[end - 1]){
+                end++;
+            }
+            if(end < prices.length && prices[end] + 1 != prices[end - 1]){
+                long length = end - start;
+                ans += ((length) * (length + 1))/2; 
+                start = end;
+            }
+            if(end == prices.length){
+                break;
+            }
+            end++;
         }
-        long len = prices.length - left;
-        ans += len * (len + 1)/2;
+        long length = end - start;
+        ans += ((length) * (length + 1))/2; 
+        start = end;
         return ans;
     }
 }
